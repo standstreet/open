@@ -8,6 +8,7 @@ import java.io.Serializable;
 public class UserDto implements Serializable{
     private String id;
     private String loginName;
+    private String salt;
     private String password;
 
     public String getId() {
@@ -32,5 +33,13 @@ public class UserDto implements Serializable{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 }

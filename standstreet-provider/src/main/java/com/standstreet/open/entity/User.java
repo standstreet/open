@@ -7,6 +7,8 @@ public class User {
     private String id;
     private String loginName;
     private String password;
+    private String salt;
+    private String encodePassword;
 
     public String getId() {
         return id;
@@ -30,5 +32,21 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    public String getEncodePassword() {
+        return encodePassword;
+    }
+
+    public void setEncodePassword(String encodePassword) {
+        this.encodePassword = encodePassword;
     }
 }
