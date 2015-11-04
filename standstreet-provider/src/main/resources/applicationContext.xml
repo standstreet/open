@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns="http://www.springframework.org/schema/beans" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/cache
+        http://www.springframework.org/schema/cache/spring-cache.xsd"
+       default-lazy-init="true">
+
+    <description>Spring公共配置</description>
+
+    <!-- 该 BeanPostProcessor 将自动对标注 @Autowired 的 Bean 进行注入 -->
+    <context:annotation-config/>
+
+    <!-- 使用annotation 自动注册bean, 并保证@Required、@Autowired的属性被注入 -->
+    <context:component-scan base-package="com.standstreet.open"/>
+
+    <bean id="jdbcTemplate"
+          class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- MyBatis配置 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:MyBatisConfiguration.xml"/>
+        <!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 -->
+        <property name="typeAliasesPackage" value="com.standstreet.open.entity"/>
+        <!-- 显式指定Mapper文件位置 -->
+        <property name="mapperLocations" value="classpath:/mybatis/UserMapper.xml"/>
+    </bean>
+    <!-- 扫描basePackage下所有以@MyBatisRepository标识的 接口 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.standstreet.open.dao"/>
+        <property name="annotationClass"
+                  value="com.standstreet.open.dao.common.MyBatisRepository"/>
+    </bean>
+
+    <!-- 使用annotation定义事务 -->
+    <tx:annotation-driven  proxy-target-class="true" />
+    <bean id="transactionManager" name="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean>
+    <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*" propagation="REQUIRED" rollback-for="MyException"/>
+        </tx:attributes>
+    </tx:advice>
+    <aop:config proxy-target-class="true">
+        <aop:pointcut id="transactionPointcut"
+                      expression="execution(* com.standstreet.open.api.impl.*.*(..))"/>
+        <aop:advisor pointcut-ref="transactionPointcut"
+                     advice-ref="transactionAdvice"/>
+    </aop:config>
+    <!-- JSR303 Validator定义 -->
+    <bean id="validator"
+          class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+
+
+    <!-- 使用Spring的ThreadPoolTaskExecutor类创建一个线程池，方便以后实现 多线程-->
+    <bean id="taskExecutor"
+          class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="25" />
+        <property name="maxPoolSize" value="50" />
+        <property name="WaitForTasksToCompleteOnShutdown" value="true" />
+    </bean>
+
+
+    <!-- production环境 -->
+    <beans profile="production">
+        <context:property-placeholder
+                ignore-unresolvable="true" location="classpath*:/application.properties"/>
+        <import resource="Provider.xml"/>
+        <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+              init-method="init" destroy-method="close">
+            <property name="driverClassName" value="${jdbc.driver}"/>
+            <property name="url" value="${jdbc.url}"/>
+            <property name="username" value="${jdbc.username}"/>
+            <property name="password" value="${jdbc.password}"/>
+            <!-- 初始化连接大小 -->
+            <property name="initialSize" value="5"/>
+            <property name="maxActive">
+                <value>${jdbc.pool.maxActive}</value>
+            </property>
+            <property name="maxIdle">
+                <value>${jdbc.pool.maxIdle}</value>
+            </property>
+            <property name="minIdle">
+                <value>${jdbc.pool.minIdle}</value>
+            </property>
+            <property name="maxWait">
+                <value>${jdbc.pool.maxWait}</value>
+            </property>
+        </bean>
+    </beans>
+
+
+    <!-- local development环境 -->
+    <beans profile="development">
+        <context:property-placeholder
+                ignore-resource-not-found="true"
+                location="classpath*:/application.development.properties"/>
+
+        <import resource="Provider.xml"/>
+        <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+              init-method="init" destroy-method="close">
+            <property name="driverClassName" value="${jdbc.driver}"/>
+            <property name="url" value="${jdbc.url}"/>
+            <property name="username" value="${jdbc.username}"/>
+            <property name="password" value="${jdbc.password}"/>
+            <!-- 初始化连接大小 -->
+            <property name="initialSize" value="5"/>
+            <property name="maxActive">
+                <value>${jdbc.pool.maxActive}</value>
+            </property>
+            <property name="minIdle">
+                <value>${jdbc.pool.minIdle}</value>
+            </property>
+            <property name="maxWait">
+                <value>${jdbc.pool.maxWait}</value>
+            </property>
+            <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+            <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+            <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+            <property name="minEvictableIdleTimeMillis" value="300000"/>
+
+            <!-- 打开removeAbandoned功能 -->
+            <property name="removeAbandoned" value="true"/>
+            <!-- 1800秒，也就是30分钟 -->
+            <property name="removeAbandonedTimeout" value="1800"/>
+            <!-- 关闭abanded连接时输出错误日志 -->
+            <property name="logAbandoned" value="true"/>
+
+        </bean>
+    </beans>
+</beans>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://code.alibabatech.com/schema/dubbo
+       http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!-- 提供方应用信息，用于计算依赖关系 -->
+    <dubbo:application name="chpay"/>
+    <!-- 使用multicast广播注册中心暴露服务地址 -->
+    <dubbo:registry address="${zookeeper.registry.address}"/>
+    <dubbo:protocol name="dubbo" port="${zookeeper.protocol.port}" serialization="hessian2"/>
+    <dubbo:provider timeout="${zookeeper.provider.timeout}"/>
+    <!--use tomcat server-->
+    <dubbo:protocol name="rest" port="${rest.port}" contextpath="standstreet" server="tomcat"
+                    extension="com.standstreet.open.extension.TraceInterceptor,
+                    com.standstreet.open.extension.TraceFilter,
+                    com.standstreet.open.extension.ClientTraceFilter,
+                    com.standstreet.open.extension.DynamicTraceBinding,
+                    com.standstreet.open.extension.InternalServerExceptionMapper,
+                    com.standstreet.open.extension.NotFoundExceptionMapper,
+                    com.standstreet.open.extension.ValidationExceptionMapper,
+                    com.alibaba.dubbo.rpc.protocol.rest.support.LoggingFilter"/>
+
+    <dubbo:service protocol="dubbo" interface="com.standstreet.open.api.UserService"
+                   ref="userService"/>
+    <bean id="userService" class="com.standstreet.open.api.impl.UserServiceImpl"/>
+
+
+    <!--配置暴露rest接口-->
+    <bean id="userRestService" class="com.standstreet.open.api.impl.rest.UserRestServiceImpl"/>
+    <dubbo:service protocol="rest" interface="com.standstreet.open.api.rest.UserRestService"
+                   ref="userRestService"/>
+</beans>
