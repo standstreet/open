@@ -6,15 +6,15 @@ import java.io.Serializable;
  * Created by xiaolong.zhu@changhong.com on 2015/11/2.
  */
 public class UserDto implements Serializable{
-    private Long id;
-    private String uuid;
-    private String loginName;
-    private String password;                //不需要持久化
-    private String salt;
-    private Boolean online;
-    private String phone;
-    private String email;
-    private String qq;
+    private Long id;                        //用户唯一id
+    private String uuid;                    //用户唯一标识uuid
+    private String loginName;               //用户登陆账号
+    private String password;                //明文密码，不需要持久化
+    private String salt;                    //用户密码延值
+    private Boolean online;                 //在线状态
+    private String phone;                   //手机号码
+    private String email;                   //邮箱账号
+    private String qq;                      //QQ号码
 
     public Long getId() {
         return id;
