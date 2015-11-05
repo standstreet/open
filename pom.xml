@@ -8,6 +8,7 @@
   <modules>
     <module>standstreet-api</module>
     <module>standstreet-provider</module>
+    <module>standstreet-exception</module>
   </modules>
   <name>standstreet</name>
   <url>http://maven.apache.org</url>

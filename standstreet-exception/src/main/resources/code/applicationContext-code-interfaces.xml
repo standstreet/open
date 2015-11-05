@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:error="http://www.standstreet.com/schema/error"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.standstreet.com/schema/error
+                           http://www.standstreet.com/schema/error/error.xsd">
+    <!-- 异常代码配置  -->
+    <bean id="eCode_interface" class="com.standstreet.open.exception.ECode">
+        <property name="errorMap">
+            <map>
+                <!-- 认证授权Error 10000开始 -->
+                <entry key="success">
+                    <error:error code="200" info="success！" des="操作成功"></error:error>
+                </entry>
+            </map>
+        </property>
+    </bean>
+</beans>

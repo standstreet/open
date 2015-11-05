@@ -11,5 +11,5 @@ public interface UserMyBatisDao {
 
     User findUserByLoginName(String loginName);
 
-    User findUserById(String id);
+    User findUserByUuid(String uuid);
 }

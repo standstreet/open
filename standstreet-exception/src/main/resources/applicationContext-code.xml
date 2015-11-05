@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!-- 代码常量  -->
+    <!--<import resource="./code/applicationContext-constant.xml"/>-->
+
+    <!-- 模块异常码配置 -->
+    <import resource="classpath:code/applicationContext-code-common.xml"/>
+    <!-- 接口异常码配置 -->
+    <import resource="classpath:code/applicationContext-code-interfaces.xml"/>
+
+    <!-- 接口异常码配置 -->
+    <!--<import resource="classpath:code/applicationContext-code-common.xml"/>-->
+
+    <!-- 注入工具类 -->
+    <bean id="eCodeUtil" class="com.standstreet.open.exception.ECodeUtil">
+        <property name="eCode_comm" ref="eCode_comm"/>
+        <property name="eCode_interface" ref="eCode_interface"/>
+    </bean>
+</beans>

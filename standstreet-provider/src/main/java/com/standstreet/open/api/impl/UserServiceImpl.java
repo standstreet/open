@@ -2,6 +2,7 @@ package com.standstreet.open.api.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.standstreet.open.api.UserService;
+import com.standstreet.open.api.impl.util.PasswordUtil;
 import com.standstreet.open.dao.UserMyBatisDao;
 import com.standstreet.open.entity.User;
 import org.slf4j.Logger;
@@ -22,16 +23,18 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public JSONObject login(JSONObject login) throws Exception {
+//        if (user.getPassword().equals(encryptPassword(password, user))) {
+
         if(login.containsKey("loginName")&&login.containsKey("password")){
             String loginName=login.getString("loginName");
             User user= userMyBatisDao.findUserByLoginName(loginName);
             if(user!=null){
-                if(user.getPassword().equals(login.getString("password"))){
-                    JSONObject result=new JSONObject();
-                    result.put("msg","登陆成功");
-                    return result;
+                if(user.getEncodePassword().equals(PasswordUtil.encryptPassword(login.getString("password"),user))){
+                    //todo 密码正确
+                    return null;
                 }else{
-                    throw new Exception("密码错误");
+                    //todo 密码错误
+                    return null;
                 }
             }else{
                 throw new Exception("用户不存在");

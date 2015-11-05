@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:error="http://www.standstreet.com/schema/error"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.standstreet.com/schema/error
+                           http://www.standstreet.com/schema/error/error.xsd">
+    <!-- 异常代码配置  -->
+    <bean id="eCode_comm" class="com.standstreet.open.exception.ECode">
+        <property name="errorMap">
+            <!--suppress InjectionValueTypeInspection -->
+            <map>
+                <!-- 以20000xxx格式的为基础异常  -->
+                <entry key="common.param.is.null">
+                    <error:error code="2000000" info="参数验证！" des="必要参数为空,或不合法"/>
+                </entry>
+            </map>
+        </property>
+    </bean>
+</beans>

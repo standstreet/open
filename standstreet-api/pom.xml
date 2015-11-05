@@ -11,6 +11,11 @@
     <url>http://maven.apache.org</url>
     <dependencies>
         <dependency>
+            <groupId>com.standstreet.open</groupId>
+            <artifactId>standstreet-exception</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jaxrs</artifactId>
             <version>3.0.11.Final</version>
