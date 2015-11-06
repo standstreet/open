@@ -17,6 +17,7 @@
 
     <description>Spring公共配置</description>
 
+    <import resource="classpath*:applicationContext-code.xml"/>
     <!-- 该 BeanPostProcessor 将自动对标注 @Autowired 的 Bean 进行注入 -->
     <context:annotation-config/>
 

@@ -1,6 +1,7 @@
 package com.standstreet.open.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by xiaolong.zhu@changhong.com on 2015/11/2.
@@ -15,6 +16,9 @@ public class UserDto implements Serializable{
     private String phone;                   //手机号码
     private String email;                   //邮箱账号
     private String qq;                      //QQ号码
+    private Date createTime;                //注册时间
+    private Date updateTime;                //更新时间
+
 
     public Long getId() {
         return id;
@@ -86,5 +90,21 @@ public class UserDto implements Serializable{
 
     public void setQq(String qq) {
         this.qq = qq;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

@@ -15,6 +15,30 @@
                 <entry key="common.param.is.null">
                     <error:error code="2000000" info="参数验证！" des="必要参数为空,或不合法"/>
                 </entry>
+                <entry key="common.email.is.error">
+                    <error:error code="2000001" info="邮箱格式不正确！" des="邮箱格式不符合要求"/>
+                </entry>
+                <entry key="common.user.loginname.error">
+                    <error:error code="2000002" info="登录名不合法！" des="登录名不能全为数字"/>
+                </entry>
+                <entry key="common.user.emailIsExisted">
+                    <error:error code="2000003" info="邮箱已存在！" des="邮箱账号不能重复"/>
+                </entry>
+                <entry key="common.user.loginNameIsExisted">
+                    <error:error code="2000004" info="登录名已存在！" des="登录名不能重复"/>
+                </entry>
+                <entry key="common.user.register.failed">
+                    <error:error code="2000005" info="注册失败！" des="填写信息有误,不能注册"/>
+                </entry>
+                <entry key="common.user.not.existed">
+                    <error:error code="2000006" info="用户不存在！" des="没有此用户"/>
+                </entry>
+                <entry key="common.user.login.failed">
+                    <error:error code="2000007" info="登陆失败！" des="密码错误"/>
+                </entry>
+                <entry key="common.param.is.error">
+                    <error:error code="2000008" info="参数错误！" des="参数错误"/>
+                </entry>
             </map>
         </property>
     </bean>

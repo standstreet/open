@@ -12,4 +12,8 @@ public interface UserMyBatisDao {
     User findUserByLoginName(String loginName);
 
     User findUserByUuid(String uuid);
+
+    User findByEmail(String email);
+
+    int register(User user);
 }

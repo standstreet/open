@@ -3,27 +3,53 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace必须指向Dao接口 -->
 <mapper namespace="com.standstreet.open.dao.UserMyBatisDao">
-    <!--<resultMap id="UserMap" type="com.standstreet.open.entity.User">-->
-        <!--<id column="id" property="id" jdbcType="VARCHAR"/>-->
-        <!--<result column="login_name" property="loginName" jdbcType="VARCHAR"/>-->
-        <!--<result column="password" property="password" jdbcType="VARCHAR"/>-->
-    <!--</resultMap>-->
+    <resultMap id="UserMap" type="com.standstreet.open.entity.User">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="uuid" column="uuid" jdbcType="VARCHAR"/>
+        <result property="loginName" column="login_name" jdbcType="VARCHAR"/>
+        <result property="encodePassword" column="encode_password" jdbcType="VARCHAR"/>
+        <result property="salt" column="salt" jdbcType="VARCHAR"/>
+        <result property="online" column="online" jdbcType="INTEGER"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="qq" column="qq" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
     <sql id="All_Column_Values">
-        id,uuid,login_name,salt,encode_password,online,phone,email,qq
+        uuid,login_name,salt,encode_password,online,phone,email,qq
     </sql>
 
-    <select id="findUserByLoginName" resultMap="com.standstreet.open.entity.User" parameterType="java.lang.String">
+    <select id="findUserByLoginName" resultMap="UserMap" parameterType="java.lang.String">
         SELECT
         <include refid="All_Column_Values"/>
         FROM ss_user
         WHERE login_name=#{0}
     </select>
 
-    <select id="findUserByUuid" resultMap="com.standstreet.open.entity.User" parameterType="java.lang.String">
+    <select id="findUserByUuid" resultMap="UserMap" parameterType="java.lang.String">
         SELECT
         <include refid="All_Column_Values"/>
         FROM ss_user
         WHERE uuid=#{0}
     </select>
+    <select id="findByEmail" resultMap="UserMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="All_Column_Values"/>
+        FROM ss_user
+        WHERE email=#{0}
+    </select>
+    <insert id="register" parameterType="com.standstreet.open.entity.User">
+        INSERT INTO ss_user
+        (
+        uuid,login_name,salt,encode_password,online,
+        phone,email,qq,create_time,update_time
+        )
+        VALUES
+        (
+        #{uuid},#{loginName},#{salt},#{encodePassword},#{online},
+        #{phone},#{email},#{qq},#{createTime},#{updateTime}
+        )
+    </insert>
 
 </mapper>

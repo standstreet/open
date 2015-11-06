@@ -1,7 +1,9 @@
 package com.standstreet.open.api.rest;
 
 import com.alibaba.fastjson.JSONObject;
+import com.standstreet.open.dto.UserDto;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
 
 /**
@@ -9,5 +11,7 @@ import javax.ws.rs.core.Response;
  */
 public interface UserRestService {
 
-    Response login(JSONObject login);
+    Response login(JSONObject login,HttpServletRequest request);
+
+    Response register(UserDto userDto,HttpServletRequest request);
 }
